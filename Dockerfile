@@ -1,4 +1,4 @@
-FROM dorowu/ubuntu-desktop-lxde-vnc:bionic
+FROM dorowu/ubuntu-desktop-lxde-vnc:bionic AS rosvnc_base
 LABEL maintainer Kazuki Urabe <urabe0225@gmail.com>
 
 RUN apt-get update && apt-get install -y dirmngr
@@ -27,9 +27,13 @@ RUN source /opt/ros/melodic/setup.bash && catkin_make
 RUN echo "source /opt/ros/melodic/setup.bash" >> /root/.bashrc
 RUN echo "source `catkin locate --shell-verbs`" >> /root/.bashrc
 
-#WORKDIR /root/catkin_ws/src
-#RUN source /opt/ros/melodic/setup.bash && \
-#    catkin_create_pkg beginner_tutorials std_msgs rospy
-#WORKDIR /root/catkin_ws/
-#RUN source /opt/ros/melodic/setup.bash && catkin_make
-#COPY scripts/ /root/catkin_ws/src/beginner_tutorials/scripts/
+FROM rosvnc_base AS rosvnc_test
+
+WORKDIR /root/catkin_ws/src
+RUN source /opt/ros/melodic/setup.bash && \
+    catkin_create_pkg beginner_tutorials std_msgs rospy
+WORKDIR /root/catkin_ws/
+RUN source /opt/ros/melodic/setup.bash && catkin_make
+COPY scripts/ /root/catkin_ws/src/beginner_tutorials/scripts/
+
+#FROM rosvnc_base AS rosvnc_src

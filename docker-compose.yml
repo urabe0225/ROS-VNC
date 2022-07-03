@@ -10,7 +10,9 @@ services:
       - "80:11311"
 
   rosgui:
-    build: ./
+    build:
+      context: ./
+      target: rosvnc_test
     container_name: rosgui
     ports:
       - 6080:80
