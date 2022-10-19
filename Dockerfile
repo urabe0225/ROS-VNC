@@ -27,7 +27,7 @@ RUN source /opt/ros/melodic/setup.bash && catkin_make
 RUN echo "source /opt/ros/melodic/setup.bash" >> /root/.bashrc
 RUN echo "source `catkin locate --shell-verbs`" >> /root/.bashrc
 
-FROM rosvnc_base AS rosvnc_test
+FROM rosvnc_base AS rosvnc_script
 
 WORKDIR /root/catkin_ws/src
 RUN source /opt/ros/melodic/setup.bash && \
@@ -35,5 +35,3 @@ RUN source /opt/ros/melodic/setup.bash && \
 WORKDIR /root/catkin_ws/
 RUN source /opt/ros/melodic/setup.bash && catkin_make
 COPY scripts/ /root/catkin_ws/src/beginner_tutorials/scripts/
-
-#FROM rosvnc_base AS rosvnc_src

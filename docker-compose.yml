@@ -12,15 +12,17 @@ services:
   rosgui:
     build:
       context: ./
-      target: rosvnc_test
+      target: rosvnc_base
     container_name: rosgui
     ports:
       - 6080:80
     networks:
-      - rosnet
+      rosnet:
+        ipv4_address: 172.20.0.20
     environment:
-      - ROS_HOSTNAME=rosgui
+      - ROS_HOSTNAME=172.20.0.20
       - ROS_MASTER_URI=http://rosmaster:11311
+      - ROS_IP=172.20.0.20
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -30,3 +32,7 @@ networks:
   rosnet:
     name: rosnet
     driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.20.0.0/16
